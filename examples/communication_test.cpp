@@ -36,13 +36,13 @@ int main(int argc, char** argv) {
     setDefaultBehavior(robot);
 
     // First move the robot to a suitable joint configuration
-    std::array<double, 7> q_goal = {{0, -M_PI_4, 0, -3 * M_PI_4, 0, M_PI_2, M_PI_4}};
-    MotionGenerator motion_generator(0.5, q_goal);
+    //std::array<double, 7> q_goal = {{0, -M_PI_4, 0, -3 * M_PI_4, 0, M_PI_2, M_PI_4}};
+    //MotionGenerator motion_generator(0.5, q_goal);
     std::cout << "WARNING: This example will move the robot! "
               << "Please make sure to have the user stop button at hand!" << std::endl
               << "Press Enter to continue..." << std::endl;
     std::cin.ignore();
-    robot.control(motion_generator);
+    //robot.control(motion_generator);
     std::cout << "Finished moving to initial joint configuration." << std::endl << std::endl;
     std::cout << "Starting communication test." << std::endl;
 
@@ -62,10 +62,14 @@ int main(int argc, char** argv) {
           }
           counter++;
 
-          if (counter % 100 == 0) {
+          if (counter % 200 == 0) {
             std::cout << "#" << counter
                       << " Current success rate: " << robot_state.control_command_success_rate
-                      << std::endl;
+                      << " time: " << time;
+            for (int i = 0; i < sizeof(robot_state.q)/sizeof(double); i++) {
+              std::cout << "  q(" << i << ")=" << robot_state.q[i] << ", "; //minus the commas, remove (<< ", ") or to space out the grades, just remove the comma
+            }
+            std::cout << std::endl;
           }
           std::this_thread::sleep_for(std::chrono::microseconds(100));
 
